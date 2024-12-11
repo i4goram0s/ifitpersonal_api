@@ -22,7 +22,7 @@ def home():
     """Redireciona para /openapi, tela que permite a escolha do estilo de documentação.
     """
     return redirect('/openapi')
-
+    
 
 @app.post('/exercicio', tags=[exercicio_tag],
           responses={"200": ExercicioViewSchema, "409": ErrorSchema, "400": ErrorSchema})
@@ -46,12 +46,12 @@ def add_exercicio(form: ExercicioSchema):
 
     except IntegrityError as e:
         # como a duplicidade do nome é a provável razão do IntegrityError
-        error_msg = "Exercicio de mesmo nome já salvo na base :/"
+        error_msg = "Exercicio já cadastrado"
         return {"mesage": error_msg}, 409
 
     except Exception as e:
         # caso um erro fora do previsto
-        error_msg = "Não foi possível salvar novo item :/\n" + str(e)
+        error_msg = "Ocorreu um erro inesperado no cadastro exercício\n" + str(e)
         return {"mesage": error_msg}, 400
 
 
@@ -60,7 +60,7 @@ def add_exercicio(form: ExercicioSchema):
 def get_exercicios():
     """Faz a busca por todos os Exercicios cadastrados
 
-    Retorna uma  listagem de exercicios já cadsatrados na base.
+    Retorna uma  listagem de exercicios já cadastrados na base.
     """
     # criando conexão com a base
     session = Session()
@@ -83,15 +83,15 @@ def get_exercicio(query: ExercicioBuscaSchema):
 
     Retorna um exercicíco com base a partir do nome buscado.
     """
-    exercicio_id = query.nome
+    exercicio_nome = query.nome
     # criando conexão com a base
     session = Session()
     # fazendo a busca
-    exercicio = session.query(Exercicio).filter(Exercicio.id == exercicio_id).first()
+    exercicio = session.query(Exercicio).filter(Exercicio.nome == exercicio_nome).first()
 
     if not exercicio:
         # se o exercicio não foi encontrado
-        error_msg = "Exercicio não encontrado na base :/"
+        error_msg = "Exercicio não encontrado"
         return {"mesage": error_msg}, 404
     else:
         # retorna a representação de exercicio
@@ -118,6 +118,6 @@ def del_exercicio(query: ExercicioBuscaSchema):
         return {"mesage": "Exercicio removido", "id": exercicio_nome}
     else:
         # se o exercicio não foi encontrado
-        error_msg = "Exercicio não encontrado na base :/"
+        error_msg = "Exercicio não encontrado"
         return {"mesage": error_msg}, 404
 

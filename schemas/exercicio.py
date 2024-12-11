@@ -19,7 +19,7 @@ class ExercicioBuscaSchema(BaseModel):
 
 
 class ListagemExerciciosSchema(BaseModel):
-    """ Define como uma listagem de exercicios será retornada.
+    """ Definição da listagem de exercícios.
     """
     exercicios:List[ExercicioSchema]
 
@@ -40,7 +40,7 @@ def apresenta_exercicios(exercicios: List[Exercicio]):
 
 
 class ExercicioViewSchema(BaseModel):
-    """ Define como um exercicio será retornado: exercicio + comentários.
+    """ Definição de retorno de um único exercício
     """
     id: int = 1
     nome: str = "Back Squat"
@@ -49,15 +49,13 @@ class ExercicioViewSchema(BaseModel):
 
 
 class ExercicioDelSchema(BaseModel):
-    """ Define como deve ser a estrutura do dado retornado após uma requisição
-        de remoção.
+    """ Definição do retorno após a exclusão de um exercicio
     """
     mesage: str
     nome: str
 
 def apresenta_exercicio(exercicio: Exercicio):
-    """ Retorna uma representação do exercicio seguindo o schema definido em
-        exercicioViewSchema.
+    """ Retorno dos dados do exercicio
     """
     return {
         "id": exercicio.id,
